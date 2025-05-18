@@ -1,0 +1,5 @@
+Machine M1 : Forer
+Machine M2 : Usiner
+Machine M3 : Forer
+Machine M4 : Souder
+Machine M5 : Découpe
