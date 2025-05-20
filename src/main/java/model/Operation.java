@@ -39,8 +39,4 @@ public class Operation {
         return dureeOperation;
     }
 
-    public void afficherOperation() {
-        System.out.println("Référence: " + refOperation + ", Désignation: " + dOperation +
-                           ", Équipement: " + refEquipement + ", Durée: " + dureeOperation + " h");
-    }
 }

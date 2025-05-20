@@ -1,0 +1,4 @@
+P001 Produit1 Machine1 Machine2
+P002 Produit2 Machine2 Machine3
+P003 Produit3 Machine1 Machine3
+

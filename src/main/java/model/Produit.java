@@ -39,18 +39,5 @@ public ArrayList<String> getMachinesTexte() {
         return dproduit;
     }
 
-    public void modifierProduit(String newCodeProduit, String newDproduit) {
-        this.codeProduit = newCodeProduit;
-        this.dproduit = newDproduit;
-    }
-
-    public void supprimerProduit() {
-        this.codeProduit = null;
-        this.dproduit = null;
-    }
-
-    public void afficherProduit() {
-        System.out.println("Code Produit: " + codeProduit);
-        System.out.println("Désignation: " + dproduit);
-    }
+    
 }

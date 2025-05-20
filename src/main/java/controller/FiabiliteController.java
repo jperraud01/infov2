@@ -6,7 +6,6 @@
 package controller;
 
 import javafx.scene.control.TextArea;
-
 import java.io.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +33,11 @@ public class FiabiliteController {
                 if (ligne.trim().isEmpty()) continue;
 
                 String[] tokens = ligne.trim().split("\\s+");
-                if (tokens.length < 4) continue;
+                if (tokens.length < 4) {
+                    outputArea.appendText("Ligne ignorée, format incorrect: " + ligne + "\n");
+                    continue;
+                }
+
 
                 String heureStr = tokens[1].replace(":", "");
                 LocalTime heure = LocalTime.parse(heureStr, DateTimeFormatter.ofPattern("HHmm"));

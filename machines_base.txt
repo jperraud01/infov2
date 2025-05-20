@@ -1,6 +1,5 @@
-M1 Fraiseuse Forage 25.0 100 150 En_panne
-M2 Tour Usinage 30.0 250 80 En_marche
-M3 Perceuse Forage 15.0 400 120 En_marche
-M4 Soudeuse Soudure 20.0 150 300 Maintenance
-M5 Laser Découpe 40.0 500 500 En_marche
-
+M1 Fraiseuse Forage 25.0 100 100 En_marche Forer
+M2 Tour Usinage 30.0 200 80 Maintenance Usiner
+M3 Laser Découper 40.0 300 90 En_marche Découper
+M4 Soudeuse Soudure 20.0 150 300 En_panne Souder
+M5 Laser Découper 40.0 500 500 En_marche Découper

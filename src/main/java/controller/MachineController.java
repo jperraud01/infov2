@@ -14,7 +14,7 @@ import view.MachineView;
 
 public class MachineController {
     
- public static void enregistrerMachine(Machine machine) {
+ public static void enregistrerMachine(Machine machine) { //pour ajouter une machine au fichier des machines
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("machines.txt", true))) {
         writer.write(
             machine.getRefMachine() + " " +
@@ -30,7 +30,7 @@ public class MachineController {
 
 }
 
-    public static void afficherMachines(TextArea outputArea) {
+    public static void afficherMachines(TextArea outputArea) { //pour lire les machines du fichier et les afficher dans la boite de texte
         try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
             String ligne;
             outputArea.appendText("Machines enregistrées :\n");
@@ -43,14 +43,8 @@ public class MachineController {
             outputArea.appendText("Erreur lors de la lecture du fichier : " + ex.getMessage() + "\n");
         }
     }
-     public static void viderFichier() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("suiviMaintenance.txt"))) {
-            writer.write("");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-   public static void supprimerMachine(String ref) {
+    
+   public static void supprimerMachine(String ref) { //supprime les machines du fichier
     File fichier = new File("machines.txt");
     File temp = new File("machines_temp.txt");
 

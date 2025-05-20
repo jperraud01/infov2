@@ -33,7 +33,7 @@ import model.Operateur;
 
 public class MachineView {
 
-    public static void ouvrirFenetreMachine(TextArea outputArea) {
+    public static void ouvrirFenetreMachine(TextArea outputArea) { //ouvre la fenetre qui permet d'ajouter une machine
         Stage stage = new Stage();
         stage.setTitle("Ajouter une Machine");
 
@@ -77,114 +77,127 @@ public class MachineView {
         stage.show();
     }
 
+ 
     public static void afficherPlanMachines() {
-        Stage stage = new Stage();
-        stage.setTitle("Plan des Machines");
+    Stage stage = new Stage();
+    stage.setTitle("Plan des Machines");
 
-        Pane planPane = new Pane();
+    Pane planPane = new Pane();
 
-        Map<String, String> operationsParMachine = new HashMap<>();
-        try (BufferedReader opReader = new BufferedReader(new FileReader("operations_par_machine.txt"))) {
-            String ligneOp;
-            while ((ligneOp = opReader.readLine()) != null) {
-                if (ligneOp.startsWith("Machine")) {
-                    String[] parts = ligneOp.split(" : ");
-                    if (parts.length == 2) {
-                        String ref = parts[0].replace("Machine", "").trim();
-                        String ops = parts[1].trim();
-                        operationsParMachine.put(ref, ops);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Operateur operateur = OperateurController.getOperateurActif();
-        List<String> toutesLesMachines = new ArrayList<>();
-
-        try (BufferedReader baseReader = new BufferedReader(new FileReader("machines_base.txt"))) {
-            String ligne;
-            while ((ligne = baseReader.readLine()) != null) {
-                toutesLesMachines.add(ligne);
-            }
-        } catch (IOException e) {
-            System.err.println("Fichier machines_base.txt manquant (ce n'est pas bloquant).");
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
-            String ligne;
-            while ((ligne = reader.readLine()) != null) {
-                toutesLesMachines.add(ligne);
-            }
-        } catch (IOException e) {
-            System.err.println("Fichier machines.txt manquant.");
-        }
-
-        for (String ligne : toutesLesMachines) {
-            String[] parts = ligne.split(" ");
-            if (parts.length >= 7) {
-                String ref = parts[0];
-                String designation = parts[1];
-                String type = parts[2];
-                float cout = Float.parseFloat(parts[3]);
-                int x = Integer.parseInt(parts[4]);
-                int y = Integer.parseInt(parts[5]);
-                String etat = parts[6];
-
-                String ops = operationsParMachine.getOrDefault(ref, "");
-                boolean compatible = true;
-                if (!ops.isEmpty() && operateur != null) {
-                    String[] opList = ops.split(",\\s*");
-                    for (String op : opList) {
-                        if (!operateur.getCompetences().contains(op)) {
-                            compatible = false;
-                            break;
-                        }
-                    }
-                }
-
-                Color couleur;
-                if (etat.equals("En_panne")) {
-                    couleur = Color.TOMATO;
-                } else if (etat.equals("Maintenance")) {
-                    couleur = Color.BEIGE;
-                } else if (!compatible) {
-                    couleur = Color.LIGHTGRAY;
-                } else {
-                    couleur = Color.LIGHTGREEN;
-                }
-
-
-                Rectangle rect = new Rectangle(50, 50);
-                rect.setFill(couleur);
-                rect.setStroke(Color.BLACK);
-                rect.setLayoutX(x);
-                rect.setLayoutY(y);
-
-                Text designationLabel = new Text(designation);
-                designationLabel.setLayoutX(x + 5);
-                designationLabel.setLayoutY(y + 35);
-
-                Text refLabel = new Text(ref);
-                refLabel.setLayoutX(x + 5);
-                refLabel.setLayoutY(y + 20);
-
-                planPane.getChildren().addAll(rect, designationLabel, refLabel);
-
-                if (!ops.isEmpty()) {
-                    Text opsLabel = new Text(ops);
-                    opsLabel.setLayoutX(x + 5);
-                    opsLabel.setLayoutY(y + 50);
-                    planPane.getChildren().add(opsLabel);
+    Map<String, String> operationsParMachine = new HashMap<>();
+    try (BufferedReader opReader = new BufferedReader(new FileReader("operations_par_machine.txt"))) {
+        String ligneOp;
+        while ((ligneOp = opReader.readLine()) != null) {
+            if (ligneOp.startsWith("Machine")) {
+                String[] parts = ligneOp.split(" : ");
+                if (parts.length == 2) {
+                    String ref = parts[0].replace("Machine", "").trim();
+                    String ops = parts[1].trim();
+                    operationsParMachine.put(ref, ops);
                 }
             }
         }
-
-        Scene scene = new Scene(planPane, 800, 600);
-        stage.setScene(scene);
-        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+
+    // Récupérer l'opérateur actif
+    Operateur operateur = OperateurController.getOperateurActif();
+    List<String> toutesLesMachines = new ArrayList<>();
+
+    // Lire les machines depuis "machines_base.txt" et "machines.txt"
+    try (BufferedReader baseReader = new BufferedReader(new FileReader("machines_base.txt"))) {
+        String ligne;
+        while ((ligne = baseReader.readLine()) != null) {
+            toutesLesMachines.add(ligne);
+        }
+    } catch (IOException e) {
+        System.err.println("Fichier machines_base.txt manquant (ce n'est pas bloquant).");
+    }
+
+    try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
+        String ligne;
+        while ((ligne = reader.readLine()) != null) {
+            toutesLesMachines.add(ligne);
+        }
+    } catch (IOException e) {
+        System.err.println("Fichier machines.txt manquant.");
+    }
+
+    for (String ligne : toutesLesMachines) {
+        String[] parts = ligne.split(" ");
+        if (parts.length >= 7) {
+            String ref = parts[0];
+            String designation = parts[1];
+            String type = parts[2];
+            float cout = Float.parseFloat(parts[3]);
+            int x = Integer.parseInt(parts[4]);
+            int y = Integer.parseInt(parts[5]);
+            String etat = parts[6];
+
+            // Récupérer les opérations requises pour la machine
+            String ops = operationsParMachine.getOrDefault(ref, "");
+            boolean compatible = true;
+
+            // Vérifier si l'opérateur a toutes les compétences nécessaires pour cette machine
+            if (!ops.isEmpty() && operateur != null) {
+                String[] opList = ops.split(",\\s*");
+                for (String op : opList) {
+                    if (!operateur.getCompetences().contains(op)) {
+                        compatible = false;
+                        break;
+                    }
+                }
+            }
+
+            Color couleur;
+
+            // Si l'opérateur est compatible, la machine doit être dans son état normal
+            if (compatible) {
+                if (etat.equals("En_panne")) {
+                    couleur = Color.TOMATO;  // Rouge pour en panne
+                } else if (etat.equals("Maintenance")) {
+                    couleur = Color.BEIGE;  // Beige pour maintenance
+                } else {
+                    couleur = Color.LIGHTGREEN;  // Vert pour en marche
+                }
+            } else {
+                // Si l'opérateur n'a pas les compétences, la machine devient grise
+                couleur = Color.LIGHTGRAY;  // Gris si l'opérateur n'a pas les compétences
+            }
+
+            // Création du rectangle représentant la machine
+            Rectangle rect = new Rectangle(50, 50);
+            rect.setFill(couleur);
+            rect.setStroke(Color.BLACK);
+            rect.setLayoutX(x);
+            rect.setLayoutY(y);
+
+            // Ajouter des informations sur la machine (référence, désignation, etc.)
+            Text designationLabel = new Text(designation);
+            designationLabel.setLayoutX(x + 5);
+            designationLabel.setLayoutY(y + 35);
+
+            Text refLabel = new Text(ref);
+            refLabel.setLayoutX(x + 5);
+            refLabel.setLayoutY(y + 20);
+
+            planPane.getChildren().addAll(rect, designationLabel, refLabel);
+
+            // Ajouter les opérations (si disponibles)
+            if (!ops.isEmpty()) {
+                Text opsLabel = new Text(ops);
+                opsLabel.setLayoutX(x + 5);
+                opsLabel.setLayoutY(y + 50);
+                planPane.getChildren().add(opsLabel);
+            }
+        }
+    }
+
+    Scene scene = new Scene(planPane, 800, 600);
+    stage.setScene(scene);
+    stage.show();
+}
 
     private static void changerEtatDansFichier(String ref, String nouvelEtat) {
         File original = new File("machines.txt");
@@ -214,7 +227,7 @@ public class MachineView {
         temp.renameTo(original);
     }
 
-    public static void afficherListeMachines(TextArea outputArea) {
+    public static void afficherListeMachines(TextArea outputArea) { //pour gérer les machines, les modifer, supprimer
         Stage stage = new Stage();
         stage.setTitle("Liste des Machines");
 

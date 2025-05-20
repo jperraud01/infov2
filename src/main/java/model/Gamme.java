@@ -53,11 +53,5 @@ public class Gamme {
         }
     }
 
-    public void afficherGamme() {
-        System.out.println("Gamme: " + refGamme + ", Produit: " + codeProduit +
-                ", Durée: " + dureeTotale + "h, Coût: " + coutTotal + "€");
-        for (Operation op : operations) {
-            op.afficherOperation();
-        }
-    }
+
 }

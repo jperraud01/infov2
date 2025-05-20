@@ -50,12 +50,7 @@ public class Machine {
         return coutHoraire * duree;
     }
 
-    public void modifierMachine(String dMachine, float cout, int x, int y) {
-        this.dmachine = dMachine;
-        this.coutHoraire = cout;
-        this.x = x;
-        this.y = y;
-    }
+   
 
     
 

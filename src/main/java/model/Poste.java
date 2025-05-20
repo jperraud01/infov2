@@ -35,22 +35,6 @@ public class Poste {
         return listeMachines;
     }
 
-   
-    public void supprimerMachine(Machine machine) {
-        listeMachines.remove(machine);
-    }
-
-    public void supprimerPoste() {
-        listeMachines.clear();
-    }
-
-    public void afficherPoste() {
-        System.out.println("Poste: " + refPoste + " - " + dposte);
-        System.out.println("Machines assignées:");
-        for (Machine m : listeMachines) {
-            System.out.println("- " + m.getRefMachine());
-        }
-    }
     private ArrayList<String> machinesTexte = new ArrayList<>();
 
     public void ajouterMachineTexte(String ref) {

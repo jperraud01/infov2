@@ -95,9 +95,6 @@ public class PosteView {
                     btnPoste.setOnAction(e -> {
                         ContextMenu menu = new ContextMenu();
 
-                        MenuItem modifier = new MenuItem("Modifier les machines");
-                        modifier.setOnAction(ev -> PosteController.ouvrirFenetrePosteModif(ref, outputArea));
-
                         MenuItem supprimer = new MenuItem("Supprimer le poste");
                         supprimer.setOnAction(ev -> {
                             supprimerPoste(ref);
@@ -106,7 +103,7 @@ public class PosteView {
                             afficherListePostes(outputArea); // refresh
                         });
 
-                        menu.getItems().addAll(modifier, supprimer);
+                        menu.getItems().addAll( supprimer);
                         menu.show(btnPoste, Side.RIGHT, 0, 0);
                     });
 

@@ -27,8 +27,6 @@ public class Equipement {
         return dEquipement;
     }
 
-    public void afficherEquipement() {
-        System.out.println("Référence: " + refEquipement + ", Désignation: " + dEquipement);
-    }
+    
 }
 

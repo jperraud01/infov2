@@ -9,19 +9,13 @@ package controller;
  * @author juper
  */
 
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import model.Gamme;
-import model.Equipement;
-import model.Operation;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import javafx.scene.control.TextArea;
 
 public class GammeController {
 
@@ -35,7 +29,6 @@ public class GammeController {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
         }
     }
 
@@ -43,7 +36,6 @@ public class GammeController {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("gammes.txt", true))) {
         writer.write("Gamme " + String.join(" ", infos) + "\n");
     } catch (IOException ex) {
-        ex.printStackTrace();
     }
 }
 

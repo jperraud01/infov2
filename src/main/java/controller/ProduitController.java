@@ -27,17 +27,31 @@ public class ProduitController {
     }
 }
 
- public static void afficherProduits(TextArea outputArea) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("produits.txt"))) {
-        String ligne;
+    public static void afficherProduits(TextArea outputArea) {
         outputArea.appendText("Produits enregistrés :\n");
-        while ((ligne = reader.readLine()) != null) {
-            outputArea.appendText(ligne + "\n");
+
+       
+        try (BufferedReader reader = new BufferedReader(new FileReader("produit_base.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                outputArea.appendText(ligne + "\n");
+            }
+        } catch (IOException ex) {
+            outputArea.appendText("Erreur lors de la lecture de produit_base.txt : " + ex.getMessage() + "\n");
         }
-    } catch (IOException ex) {
-        outputArea.appendText("Erreur lors de la lecture des produits : " + ex.getMessage() + "\n");
+
+     
+        try (BufferedReader reader = new BufferedReader(new FileReader("produits.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                outputArea.appendText(ligne + "\n");
+            }
+        } catch (IOException ex) {
+            outputArea.appendText("Erreur lors de la lecture des produits : " + ex.getMessage() + "\n");
+        }
     }
+
+  
 }
 
-
-}
+   
