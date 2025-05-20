@@ -14,6 +14,10 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import controller.FiabiliteController;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import javafx.application.Platform;
 import view.MachineView;
 import view.GammeView;
 import view.PosteView;
@@ -33,6 +37,10 @@ public class App extends Application {
         outputArea = new TextArea(); 
         outputArea.setEditable(false);
         outputArea.setPrefHeight(200);
+        
+        // Affichage du message d'accueil dans la outputArea
+    outputArea.appendText("Bienvenue dans l'application de gestion de l'atelier de fabrication !\n");
+    outputArea.appendText("Utilisez le menu pour naviguer à travers les différentes options.\n");
 
         // Menu principal
         MenuBar menuBar = new MenuBar();
@@ -94,7 +102,11 @@ public class App extends Application {
         calculerFiabilite.setOnAction(e -> FiabiliteController.calculerFiabilite(outputArea));
         afficherPlan.setOnAction(e -> MachineView.afficherPlanMachines());
 
-
+         primaryStage.setOnCloseRequest(event -> {
+        System.out.println("Fermeture de la fenêtre...");
+        stop();
+        Platform.exit();  // Cela appellera la méthode stop() et fermera proprement l'application
+    });
         
         // Disposition
         BorderPane root = new BorderPane();
@@ -115,18 +127,21 @@ public class App extends Application {
         viderFichier("produits.txt");
         viderFichier("postes.txt");
         viderFichier("gammes.txt");
-        viderFichier("operateur.txt");
-        viderFichier("operations_par_machine.txt");
-}
-    private void viderFichier(String nomFichier) {
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier))) {
-        writer.write(""); // Vide le fichier
-    } catch (IOException e) {
-        System.err.println("Erreur en vidant le fichier : " + nomFichier);
-    }
+         viderFichier("operateurs.txt");
+         System.exit(0);
+        
+       
 }
   
-    
+    private void viderFichier(String nomFichier) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier))) {
+        writer.write("");
+    } catch (IOException e) {
+        System.err.println("Erreur en vidant " + nomFichier);
+    }
+}
+
+  
 public static void main(String[] args) {
     javafx.application.Application.launch(OperateurApp.class);
     
