@@ -59,44 +59,56 @@ public class ProduitView {
 
         // Bouton pour ajouter le produit
         Button btnAjouter = new Button("Ajouter");
-        btnAjouter.setOnAction(e -> {
-            String code = codeField.getText();
-            String designation = designationField.getText();
+ btnAjouter.setOnAction(e -> {
+    String code = codeField.getText();
+    String designation = designationField.getText();
 
-            // Créer un objet produit avec les informations saisies
-            Produit produit = new Produit(code, designation);
+    // Créer un objet produit avec les informations saisies
+    Produit produit = new Produit(code, designation);
 
-            double coutTotal = 0; // Variable pour accumuler le coût total de production
+    // Initialisation du coût total à zéro
+    double coutTotal = 0;
+    ProduitController.enregistrerProduit(produit);
+    // Ajouter les machines sélectionnées et calculer le coût de production
+    for (String machine : machinesDisponibles) {
+        CheckBox checkBox = (CheckBox) machinesBox.lookup("#" + machine); // On cherche le CheckBox de la machine
+        if (checkBox != null && checkBox.isSelected()) {
+            TextField dureeField = machinesEtDuree.get(machine); // Récupérer le TextField pour la durée
 
-            // Ajouter les machines sélectionnées et calculer le coût de production
-            for (String machine : machinesDisponibles) {
-                CheckBox checkBox = (CheckBox) machinesBox.lookup("#" + machine); // On cherche le CheckBox de la machine
-                if (checkBox != null && checkBox.isSelected()) {
-                    TextField dureeField = machinesEtDuree.get(machine); // Récupérer le TextField pour la durée
+            try {
+                double duree = Double.parseDouble(dureeField.getText()); // Récupérer la durée
+                double coutHoraire = ProduitController.getCoutHoraireForMachine(machine); // Récupérer le coût horaire de la machine
 
-                    try {
-                        double duree = Double.parseDouble(dureeField.getText()); // Récupérer la durée
-                        double coutHoraire = ProduitController.getCoutHoraireForMachine(machine); // Récupérer le coût horaire de la machine
-                        double coutMachine = duree * coutHoraire; // Calcul du coût pour cette machine
+                // Ajouter la machine au produit avec sa durée et son coût horaire
+                produit.ajouterMachine(machine, duree, coutHoraire);
 
-                        // Ajouter le coût pour cette machine au coût total
-                        coutTotal += coutMachine;
+                // Ajouter le coût de la machine au coût total
+                coutTotal += duree * coutHoraire;
 
-                        // Ajouter la machine au produit
-                        produit.ajouterMachineTexte(machine);
-                    } catch (NumberFormatException ex) {
-                        // Si la durée n'est pas un nombre valide, ignorer cette machine
-                        outputArea.appendText("Durée invalide pour la machine " + machine + "\n");
-                    }
-                }
+                // Afficher la machine et son coût dans la console pour vérifier
+                System.out.println("Machine ajoutée : " + machine + ", Durée : " + duree + " heures, Coût horaire : " + coutHoraire + " €, Coût de la machine : " + duree * coutHoraire + " €");
+            } catch (NumberFormatException ex) {
+                // Si la durée n'est pas un nombre valide, ignorer cette machine
+                outputArea.appendText("Durée invalide pour la machine " + machine + "\n");
             }
+        }
+    }
 
-            // Enregistrer le produit avec les machines associées
-            ProduitController.enregistrerProduit(produit);
+    // Vérification du produit et coût total dans la console
+    System.out.println("Produit ajouté : " + produit.getCodeProduit() + " - " + produit.getDproduit());
+    System.out.println("Coût total de production : " + coutTotal + " €");
 
-            // Fermer la fenêtre d'ajout de produit
-            stage.close();
-        });
+    // Enregistrer le produit avec les machines et leur durée
+    
+
+    // Afficher le coût total dans la TextArea
+    outputArea.appendText("Produit ajouté: " + produit.getCodeProduit() + " - " + produit.getDproduit() + " - Coût de production: " + String.format("%.2f", coutTotal) + " €\n");
+
+    // Fermer la fenêtre d'ajout de produit
+    stage.close();
+});
+
+
 
         // Organiser les éléments dans un VBox
         VBox root = new VBox(10,

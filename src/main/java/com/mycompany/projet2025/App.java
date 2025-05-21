@@ -92,12 +92,9 @@ public void start(Stage primaryStage) {
     afficherGammes.setOnAction(e -> GammeController.afficherGammes(outputArea));
     
     ajouterProduit.setOnAction(e -> ProduitView.ouvrirFenetreProduit(outputArea));
+    afficherProduits.setOnAction(e -> ProduitController.afficherProduits(outputArea));
 
-    // Modification ici : action de "Afficher les produits"
-    afficherProduits.setOnAction(e -> {
-        // Afficher les produits lorsque l'utilisateur clique sur le menu
-        ProduitController.afficherProduits(outputArea);
-    });
+  
 
     ajouterPoste.setOnAction(e -> PosteView.ouvrirFenetrePoste(outputArea));
     afficherPostes.setOnAction(e -> PosteController.afficherPostes(outputArea));
