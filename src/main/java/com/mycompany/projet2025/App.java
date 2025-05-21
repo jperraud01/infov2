@@ -67,6 +67,7 @@ public void start(Stage primaryStage) {
     
     MenuItem calculerFiabilite = new MenuItem("Calculer la fiabilité");
     
+    
     MenuItem afficherPlan = new MenuItem("Afficher le plan");
     machineMenu.getItems().add(afficherPlan);
     

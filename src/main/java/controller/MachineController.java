@@ -42,7 +42,7 @@ public class MachineController {
         } catch (IOException ex) {
             outputArea.appendText("Erreur lors de la lecture du fichier : " + ex.getMessage() + "\n");
         }
-    }
+    } 
     
    public static void supprimerMachine(String ref) { //supprime les machines du fichier
     File fichier = new File("machines.txt");

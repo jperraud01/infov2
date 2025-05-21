@@ -13,12 +13,19 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Produit;
 import controller.ProduitController;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javafx.scene.control.CheckBox;
 
-/**
- *
- * @author juper
- */
+
 public class ProduitView {
+
+
     public static void ouvrirFenetreProduit(TextArea outputArea) {
         Stage stage = new Stage();
         stage.setTitle("Ajouter un Produit");
@@ -26,48 +33,110 @@ public class ProduitView {
         TextField codeField = new TextField();
         TextField designationField = new TextField();
 
+        // Récupérer la liste des machines existantes (y compris les machines de base)
+        List<String> machinesDisponibles = getMachinesDisponibles();
+
+        // Créer une VBox pour contenir les CheckBoxes et champs de saisie de durée
         VBox machinesBox = new VBox(5);
         Label machinesLabel = new Label("Machines utilisées :");
-        TextField firstMachineField = new TextField();
-        machinesBox.getChildren().add(firstMachineField);
 
-        Button addMachineBtn = new Button("+ Ajouter une machine");
-        addMachineBtn.setOnAction(e -> {
-            TextField newMachineField = new TextField();
-            machinesBox.getChildren().add(newMachineField);
-        });
+        // Créer une liste de CheckBoxes pour chaque machine disponible
+        Map<String, TextField> machinesEtDuree = new HashMap<>(); // Pour lier les machines à leurs durées
 
-        VBox root = new VBox(10,
-            new Label("Code produit :"), codeField,
-            new Label("Désignation produit :"), designationField,
-            machinesLabel, machinesBox, addMachineBtn
-        );
+        for (String machine : machinesDisponibles) {
+            // Créer un CheckBox pour la machine
+            CheckBox machineCheckBox = new CheckBox(machine);
+            machinesBox.getChildren().add(machineCheckBox);
 
+            // Ajouter un TextField pour la durée d'utilisation par machine
+            TextField dureeField = new TextField();
+            dureeField.setPromptText("Durée en heures");
+            machinesBox.getChildren().add(dureeField);
+
+            // Lier la durée au nom de la machine
+            machinesEtDuree.put(machine, dureeField);
+        }
+
+        // Bouton pour ajouter le produit
         Button btnAjouter = new Button("Ajouter");
         btnAjouter.setOnAction(e -> {
             String code = codeField.getText();
             String designation = designationField.getText();
 
+            // Créer un objet produit avec les informations saisies
             Produit produit = new Produit(code, designation);
 
-            for (javafx.scene.Node node : machinesBox.getChildren()) {
-                if (node instanceof TextField) {
-                    TextField tf = (TextField) node;
-                    if (!tf.getText().isBlank()) {
-                        produit.ajouterMachineTexte(tf.getText());
+            double coutTotal = 0; // Variable pour accumuler le coût total de production
+
+            // Ajouter les machines sélectionnées et calculer le coût de production
+            for (String machine : machinesDisponibles) {
+                CheckBox checkBox = (CheckBox) machinesBox.lookup("#" + machine); // On cherche le CheckBox de la machine
+                if (checkBox != null && checkBox.isSelected()) {
+                    TextField dureeField = machinesEtDuree.get(machine); // Récupérer le TextField pour la durée
+
+                    try {
+                        double duree = Double.parseDouble(dureeField.getText()); // Récupérer la durée
+                        double coutHoraire = ProduitController.getCoutHoraireForMachine(machine); // Récupérer le coût horaire de la machine
+                        double coutMachine = duree * coutHoraire; // Calcul du coût pour cette machine
+
+                        // Ajouter le coût pour cette machine au coût total
+                        coutTotal += coutMachine;
+
+                        // Ajouter la machine au produit
+                        produit.ajouterMachineTexte(machine);
+                    } catch (NumberFormatException ex) {
+                        // Si la durée n'est pas un nombre valide, ignorer cette machine
+                        outputArea.appendText("Durée invalide pour la machine " + machine + "\n");
                     }
                 }
             }
 
+            // Enregistrer le produit avec les machines associées
             ProduitController.enregistrerProduit(produit);
+
+            // Fermer la fenêtre d'ajout de produit
             stage.close();
         });
 
-        root.getChildren().add(btnAjouter);
+        // Organiser les éléments dans un VBox
+        VBox root = new VBox(10,
+                new Label("Code produit :"), codeField,
+                new Label("Désignation produit :"), designationField,
+                machinesLabel, machinesBox, btnAjouter
+        );
         root.setPadding(new javafx.geometry.Insets(10));
 
-        stage.setScene(new Scene(root, 400, 400));
+        // Créer la scène et l'afficher
+        Scene scene = new Scene(root, 400, 600);
+        stage.setScene(scene);
         stage.show();
+    }
+
+    // Méthode pour récupérer la liste des machines disponibles
+    private static List<String> getMachinesDisponibles() {
+        List<String> machines = new ArrayList<>();
+        
+        // Charger les machines depuis le fichier machines_base.txt (ou tout autre fichier source)
+        try (BufferedReader reader = new BufferedReader(new FileReader("machines_base.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                machines.add(ligne.trim()); // Ajouter chaque machine à la liste
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Charger les machines supplémentaires depuis machines.txt (si nécessaire)
+        try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                machines.add(ligne.trim()); // Ajouter chaque machine à la liste
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return machines;
     }
 
 }

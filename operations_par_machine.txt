@@ -4,3 +4,9 @@ Machine M3 : Découper
 Machine M4 : Souder
 Machine M5 : Découper
 Machine sdfg : Polir
+Machine srtt : Chanfreiner, Souder
+Machine iii : Percer
+Machine gt : Percer
+Machine scour : Découper
+Machine M7 : Découper
+Machine 87 : Chanfreiner
