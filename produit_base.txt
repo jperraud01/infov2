@@ -1,4 +1,4 @@
-P001 Produit1 Machine1 Machine2
-P002 Produit2 Machine2 Machine3
-P003 Produit3 Machine1 Machine3
+P001 Produit1 M1 Fraiseuse Forage 25.0 100 100 En_marche Forer M2 Tour Usinage 30.0 200 80 Maintenance Usiner
+P002 Produit2 M2 Tour Usinage 30.0 200 80 Maintenance Usiner M3 Laser Découper 40.0 300 90 En_marche Découper
+P003 Produit3 M1 Fraiseuse Forage 25.0 100 100 En_marche Forer M3 Laser Découper 40.0 300 90 En_marche Découper
 
