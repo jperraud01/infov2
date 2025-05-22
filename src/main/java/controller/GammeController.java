@@ -37,7 +37,7 @@ public class GammeController {
                 for (int i = 2; i < parts.length; i += 3) { // Chaque machine a 3 éléments : nom, durée, coût horaire
                     String machineCode = parts[i];
                     double duree = Double.parseDouble(parts[i + 1]);
-                    double coutHoraire = ProduitController.getCoutHoraireForMachine(machineCode); // Récupérer le coût horaire de la machine
+                    double coutHoraire = MachineController.getCoutHoraireForMachine(machineCode); // Récupérer le coût horaire de la machine
                     coutTotal += duree * coutHoraire; // Calcul avec la durée d'utilisation
                 }
 
@@ -65,7 +65,7 @@ public class GammeController {
                 for (int i = 2; i < parts.length; i += 3) { // Chaque machine a 3 éléments : nom, durée, coût horaire
                     String machineCode = parts[i];
                     double duree = Double.parseDouble(parts[i + 1]);
-                    double coutHoraire = ProduitController.getCoutHoraireForMachine(machineCode); // Récupérer le coût horaire de la machine
+                    double coutHoraire = MachineController.getCoutHoraireForMachine(machineCode); // Récupérer le coût horaire de la machine
                     coutTotal += duree * coutHoraire; // Calcul avec la durée d'utilisation
                 }
 

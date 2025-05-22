@@ -4,6 +4,7 @@
  */
 package model;
 import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author juper
@@ -41,55 +42,49 @@ public ArrayList<String> getMachinesTexte() {
 
     
 }*/
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Produit {
     private String codeProduit;
-    private String dproduit;
-    private ArrayList<Machine> machines = new ArrayList<>(); // Contient des objets Machine
+    private String designation;
+    private List<GammeUsage> gammes = new ArrayList<>();
 
-    // Classe interne pour représenter les machines et leurs durées
-    public static class Machine {
-        private String nom;
-        private double duree;
-        private double coutHoraire;
+    /** Représente un usage de gamme (réf de gamme + coût associé). */
+    public static class GammeUsage {
+        private final String refGamme;
+        private final double cout;
 
-        public Machine(String nom, double duree, double coutHoraire) {
-            this.nom = nom;
-            this.duree = duree;
-            this.coutHoraire = coutHoraire;
+        public GammeUsage(String refGamme, double cout) {
+            this.refGamme = refGamme;
+            this.cout     = cout;
         }
 
-        public String getNom() {
-            return nom;
-        }
-
-        public double getDuree() {
-            return duree;
-        }
-
-        public double getCoutHoraire() {
-            return coutHoraire;
-        }
+        public String getRefGamme() { return refGamme; }
+        public double getCout()     { return cout; }
     }
 
-    public void ajouterMachine(String nom, double duree, double coutHoraire) {
-        machines.add(new Machine(nom, duree, coutHoraire));
-    }
-
-    public ArrayList<Machine> getMachines() {
-        return machines;
-    }
-
-    public Produit(String codeProduit, String dproduit) {
+    public Produit(String codeProduit, String designation) {
         this.codeProduit = codeProduit;
-        this.dproduit = dproduit;
+        this.designation = designation;
     }
 
-    public String getCodeProduit() {
-        return codeProduit;
+    public String getCodeProduit() { return codeProduit; }
+    public String getDesignation() { return designation; }
+
+    /** Ajoute une gamme utilisée pour ce produit, avec son coût. */
+    public void ajouterGamme(String refGamme, double cout) {
+        gammes.add(new GammeUsage(refGamme, cout));
     }
 
-    public String getDproduit() {
-        return dproduit;
+    /** Renvoie la liste des gammes utilisées (avec leur coût). */
+    public List<GammeUsage> getGammes() {
+        return gammes;
     }
 }
+
 

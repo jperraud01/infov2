@@ -68,4 +68,36 @@ public class MachineController {
 }
 
 
+    // Méthode pour obtenir le coût horaire d'une machine
+    public static double getCoutHoraireForMachine(String machineCode) {
+        // Lire d'abord les machines de base
+        try (BufferedReader reader = new BufferedReader(new FileReader("machines_base.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                String[] parts = ligne.split(" ");
+                if (parts.length >= 4 && parts[0].equals(machineCode)) {
+                    return Double.parseDouble(parts[3]); // Retourner le coût horaire (4ème colonne)
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Si la machine n'est pas trouvée dans machines_base.txt, vérifier dans machines.txt
+        try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
+            String ligne;
+            while ((ligne = reader.readLine()) != null) {
+                String[] parts = ligne.split(" ");
+                if (parts.length >= 4 && parts[0].equals(machineCode)) {
+                    return Double.parseDouble(parts[3]); // Retourner le coût horaire (4ème colonne)
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0; // Retourner 0 si la machine n'est pas trouvée
+    }
 }
+
+
