@@ -85,6 +85,7 @@ public class MachineView {
     stage.setTitle("Plan des Machines");
 
     Pane planPane = new Pane();
+     planPane.setStyle("-fx-background-color: violet;");
 
     Map<String, String> operationsParMachine = new HashMap<>();
     try (BufferedReader opReader = new BufferedReader(new FileReader("operations_par_machine.txt"))) {
@@ -380,6 +381,7 @@ public static void afficherListeMachines(TextArea outputArea) {
     }
 
     ScrollPane scroll = new ScrollPane(machineList);
+   
     Scene scene = new Scene(scroll, 400, 400);
     stage.setScene(scene);
     stage.show();
