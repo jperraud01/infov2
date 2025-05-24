@@ -2,5 +2,4 @@ Machine M1 : Forer
 Machine M2 : Usiner
 Machine M3 : Découper
 Machine M4 : Souder
-Machine M5 : DécouperMachine 75657 : Usiner, Percer
-Machine 78754 : Chanfreiner, Percer, Polir
+Machine M5 : Découper

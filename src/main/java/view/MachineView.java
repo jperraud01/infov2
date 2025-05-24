@@ -85,7 +85,6 @@ public class MachineView {
     stage.setTitle("Plan des Machines");
 
     Pane planPane = new Pane();
-     planPane.setStyle("-fx-background-color: #9e84ce;");
 
     Map<String, String> operationsParMachine = new HashMap<>();
     try (BufferedReader opReader = new BufferedReader(new FileReader("operations_par_machine.txt"))) {
