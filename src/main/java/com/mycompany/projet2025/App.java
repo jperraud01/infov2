@@ -32,7 +32,7 @@ public class App extends Application {
 public void start(Stage primaryStage) {
     primaryStage.setTitle("Atelier de Fabrication - Gestion");
 
-    // Zone de texte pour afficher les informations
+    // on créé la zone de texte pour afficher les informations
     outputArea = new TextArea(); 
     outputArea.setEditable(false);
     outputArea.setPrefHeight(200);
@@ -41,41 +41,32 @@ public void start(Stage primaryStage) {
     outputArea.appendText("Bienvenue dans l'application de gestion de l'atelier de fabrication !\n");
     outputArea.appendText("Utilisez le menu pour naviguer à travers les différentes options.\n");
 
-    // Menu principal
+    // Menu principal pour chaque objet
     MenuBar menuBar = new MenuBar();
     Menu produitMenu = new Menu("Produit");
     Menu posteMenu = new Menu("Poste");
     Menu machineMenu = new Menu("Machine");
     Menu gammeMenu = new Menu("Gamme");
     Menu optimisationMenu = new Menu("Optimisation");
-
+    
+    //menuItems= menus deroulants
     MenuItem ajouterMachine = new MenuItem("Ajouter une machine");
     MenuItem afficherMachines = new MenuItem("Afficher les machines");
-
     MenuItem ajouterGamme = new MenuItem("Ajouter une gamme");
     MenuItem afficherGammes = new MenuItem("Afficher les gammes");
-    
     MenuItem ajouterProduit = new MenuItem("Ajouter un produit");
     MenuItem afficherProduits = new MenuItem("Afficher les produits");
-    
     MenuItem ajouterPoste = new MenuItem("Ajouter un poste");
     MenuItem afficherPostes = new MenuItem("Afficher un poste");
     MenuItem gererPostes = new MenuItem("Gérer les postes");
     posteMenu.getItems().add(gererPostes);
     gererPostes.setOnAction(e -> PosteView.afficherListePostes(outputArea));
-
-    
     MenuItem calculerFiabilite = new MenuItem("Calculer la fiabilité");
-    
-    
     MenuItem afficherPlan = new MenuItem("Afficher le plan");
     machineMenu.getItems().add(afficherPlan);
-    
     MenuItem gererMachines = new MenuItem("Gérer les machines");
     machineMenu.getItems().add(gererMachines);
-
     gererMachines.setOnAction(e -> MachineView.afficherListeMachines(outputArea));
-
     machineMenu.getItems().addAll(ajouterMachine, afficherMachines);
     gammeMenu.getItems().addAll(ajouterGamme, afficherGammes);
     produitMenu.getItems().addAll(ajouterProduit, afficherProduits);
@@ -84,7 +75,7 @@ public void start(Stage primaryStage) {
 
     menuBar.getMenus().addAll(machineMenu, posteMenu, produitMenu, gammeMenu, optimisationMenu);
 
-    // Actions des menus — Utilise les contrôleurs désormais
+    // Actions des menus — Utilise les contrôleurs de chaque classe
     ajouterMachine.setOnAction(e -> MachineView.ouvrirFenetreMachine(outputArea));
     afficherMachines.setOnAction(e -> MachineController.afficherMachines(outputArea));
 
@@ -94,22 +85,20 @@ public void start(Stage primaryStage) {
     ajouterProduit.setOnAction(e -> ProduitView.ouvrirFenetreProduit(outputArea));
     afficherProduits.setOnAction(e -> ProduitController.afficherProduits(outputArea));
 
-  
-
     ajouterPoste.setOnAction(e -> PosteView.ouvrirFenetrePoste(outputArea));
     afficherPostes.setOnAction(e -> PosteController.afficherPostes(outputArea));
 
     calculerFiabilite.setOnAction(e -> FiabiliteController.calculerFiabilite(outputArea));
     afficherPlan.setOnAction(e -> MachineView.afficherPlanMachines());
 
-    // Gestion de la fermeture
+    // Pour fermer la fenetre 
     primaryStage.setOnCloseRequest(event -> {
         System.out.println("Fermeture de la fenêtre...");
         stop();
-        Platform.exit();  // Cela appelle la méthode stop() et fermera proprement l'application
+        Platform.exit();  
     });
     
-    // Disposition
+    // Disposition des différentes parties de l'interface
     BorderPane root = new BorderPane();
     root.setTop(menuBar);
     root.setCenter(new ScrollPane(outputArea));
@@ -121,7 +110,7 @@ public void start(Stage primaryStage) {
 
     @Override
     public void stop() {
-        // Appelé à la fermeture de l'application
+        // Appelé à la fermeture de l'application pour vider les fichiers 
         viderFichier("machines.txt");
         viderFichier("produits.txt");
         viderFichier("postes.txt");
@@ -131,7 +120,7 @@ public void start(Stage primaryStage) {
         
        
 }
-  
+  //méhtode appelée dans stop pour vider 
     private void viderFichier(String nomFichier) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomFichier))) {
         writer.write("");
@@ -140,7 +129,7 @@ public void start(Stage primaryStage) {
     }
 }
 
-  
+  //le main qui lance l'application
 public static void main(String[] args) {
     javafx.application.Application.launch(OperateurApp.class);
     
