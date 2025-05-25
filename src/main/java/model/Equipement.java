@@ -4,11 +4,7 @@
  */
 package model;
 
-/**
- *
- * @author juper
- */
-
+//attributs et getters
 
 public class Equipement {
     private String refEquipement;

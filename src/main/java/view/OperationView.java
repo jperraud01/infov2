@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OperationView {
-
+    //ouvre la fenetre pour cocher quelles opérations realise une machine
     public static void ouvrirFenetreOperationPourMachine(String machineRef) {
         Stage stage = new Stage();
         stage.setTitle("Associer opérations à la machine : " + machineRef);

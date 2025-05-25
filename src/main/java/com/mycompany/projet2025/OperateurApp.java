@@ -13,7 +13,7 @@ import view.OperateurView;
 public class OperateurApp extends Application {
     @Override
     public void start(Stage primaryStage) {
-        // Ouvre d'abord la fenêtre opérateur
+        // Ouvre d'abord la fenêtre opérateur, voir opérateurView
         OperateurView.ouvrirFenetreOperateur(primaryStage, () -> {
             App app = new App();
             try {

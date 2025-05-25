@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class FiabiliteController {
-
+    // constructeurs de la fiabilité
     static class Evenement {
         LocalTime heure;
         String type; // "A" ou "D"
@@ -23,26 +23,25 @@ public class FiabiliteController {
         }
     }
 
+    //classe de calcul de la fiabilité
     public static void calculerFiabilite(TextArea outputArea) {
-        Map<String, List<Evenement>> evenementsParMachine = new HashMap<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        Map<String, List<Evenement>> evenementsParMachine = new HashMap<>(); //associe un evenement a une machine
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm"); //formatter les heures de debut et fin d'utilisation des machines
 
         try (BufferedReader reader = new BufferedReader(new FileReader("suiviMaintenance.txt"))) {
             String ligne;
             while ((ligne = reader.readLine()) != null) {
                 if (ligne.trim().isEmpty()) continue;
 
-                String[] tokens = ligne.trim().split("\\s+");
+                String[] tokens = ligne.trim().split("\\s+"); //ligne divisée
                 if (tokens.length < 4) {
                     outputArea.appendText("Ligne ignorée, format incorrect: " + ligne + "\n");
                     continue;
                 }
-
-
                 String heureStr = tokens[1].replace(":", "");
-                LocalTime heure = LocalTime.parse(heureStr, DateTimeFormatter.ofPattern("HHmm"));
-                String machine = tokens[2];
-                String type = tokens[3];
+                LocalTime heure = LocalTime.parse(heureStr, DateTimeFormatter.ofPattern("HHmm")); //heure extraite et formatée pour faciliter le calcul
+                String machine = tokens[2]; //extraction de la machine
+                String type = tokens[3]; //extraction du type d'evenement (A ou D)
 
                 evenementsParMachine.computeIfAbsent(machine, k -> new ArrayList<>())
                         .add(new Evenement(heure, type));
@@ -52,20 +51,21 @@ public class FiabiliteController {
             return;
         }
 
-        Map<String, Double> fiabilites = new HashMap<>();
+        Map<String, Double> fiabilites = new HashMap<>(); //chaque machine associée a une fiabilité
 
         for (String machine : evenementsParMachine.keySet()) {
             List<Evenement> liste = evenementsParMachine.get(machine);
-            liste.sort(Comparator.comparing(e -> e.heure));
+            liste.sort(Comparator.comparing(e -> e.heure)); // Tri des événements par heure
 
-            LocalTime heureDebut = LocalTime.of(6, 0);
-            LocalTime heureFin = LocalTime.of(20, 0);
+            LocalTime heureDebut = LocalTime.of(6, 0); // Heure de début de la journée de fonctionnement
+            LocalTime heureFin = LocalTime.of(20, 0); // Heure de fin de la journée de fonctionnement
 
-            long totalFonctionnement = 0;
+            long totalFonctionnement = 0; //comptabilise le temps de fonctionnement et de panne
             long totalPanne = 0;
             LocalTime dernierDebut = heureDebut;
             boolean enPanne = false;
 
+            //calcul du temps total de fonctionnement selon les temos de panne
             for (Evenement ev : liste) {
                 if (ev.type.equals("A") && !enPanne) {
                     totalFonctionnement += Duration.between(dernierDebut, ev.heure).toMinutes();
@@ -89,7 +89,7 @@ public class FiabiliteController {
             fiabilites.put(machine, fiabilite);
         }
 
-        // Tri et affichage
+        // Tri par ordre de fiabilité et affichage
         List<Map.Entry<String, Double>> listeTriee = new ArrayList<>(fiabilites.entrySet());
         listeTriee.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
 

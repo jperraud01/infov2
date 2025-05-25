@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.Operateur;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +23,9 @@ public class OperateurView {
         TextField codeField = new TextField();
         TextField nomField = new TextField();
 
+        //l'opérateur sélectionne ses compétences
         String[] competencesDispo = { "Forer", "Usiner", "Chanfreiner", "Souder", "Découper" };
-        VBox competenceBox = new VBox(5);
+        VBox competenceBox = new VBox(5); 
         List<CheckBox> checkboxes = new ArrayList<>();
         for (String comp : competencesDispo) {
             CheckBox cb = new CheckBox(comp);
@@ -45,7 +45,7 @@ public class OperateurView {
             }
 
             Operateur op = new Operateur(code, nom, competences);
-            OperateurController.enregistrerOperateur(op);
+            OperateurController.enregistrerOperateur(op); //appeller methode du controlleur
             stage.close();
             onSuccess.run(); // Lance l'interface principale
         });

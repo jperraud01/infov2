@@ -6,14 +6,9 @@ package view;
 
 
 import javafx.scene.control.*;
-
-
 import java.util.*;
-
-
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import controller.GammeController;
@@ -21,7 +16,6 @@ import model.Gamme;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
 import javafx.scene.layout.VBox;
 
 public class GammeView {
@@ -30,7 +24,7 @@ public class GammeView {
         Stage gammeStage = new Stage();
         gammeStage.setTitle("Ajouter une Gamme");
 
-        GridPane grid = new GridPane();
+        GridPane grid = new GridPane(); //creation d'un gridpane pour disposer les cases pour selectionner les machines
         grid.setPadding(new Insets(10));
         grid.setHgap(10);
         grid.setVgap(10);
@@ -38,12 +32,12 @@ public class GammeView {
         TextField refField = new TextField();
         TextField codeProduitField = new TextField();
 
-        List<String> machinesDisponibles = getMachinesDisponibles();
+        List<String> machinesDisponibles = getMachinesDisponibles(); //methode detaillee plus bas
         VBox machinesBox = new VBox(5);
         machinesBox.getChildren().add(new Label("Machines utilisées :"));
 
-        Map<String, CheckBox> machinesCheckBoxes = new HashMap<>();
-        Map<String, TextField> machinesEtDuree = new HashMap<>();
+        Map<String, CheckBox> machinesCheckBoxes = new HashMap<>(); //map pour associer chaque checkbox a sa machine
+        Map<String, TextField> machinesEtDuree = new HashMap<>(); //map pour associer une machine a sa durée
 
         // Création des checkboxes et champs de durée pour chaque machine
         for (String codeMachine : machinesDisponibles) {
@@ -75,14 +69,14 @@ public class GammeView {
                         double duree = Double.parseDouble(dureeTxt);
                         double coutH  = getCoutHoraireForMachine(codeMachine); // Récupérer le coût horaire
                         usages.add(new Gamme.MachineUsage(codeMachine, duree, coutH));
-                        coutTotal += duree * coutH; // Calcul du coût total
+                        coutTotal += duree * coutH; // Calcul du coût total de la gamme
                     } catch (NumberFormatException ex) {
                         outputArea.appendText("Durée invalide pour " + codeMachine + "\n");
                     }
                 }
             }
 
-            // Enregistrement de la gamme avec ses machines et durées
+            // Enregistrement de la gamme avec ses machines et durées dans le controller
             GammeController.enregistrerGamme(refGamme, codeProduit, usages);
 
            
@@ -107,7 +101,7 @@ public class GammeView {
         List<String> codes = new ArrayList<>();
         try (BufferedReader r = new BufferedReader(new FileReader("machines_base.txt"))) {
             String ligne;
-            while ((ligne = r.readLine()) != null) {
+            while ((ligne = r.readLine()) != null) { //lit les infos du fichier séparées par des espaces
                 String[] p = ligne.split(" ");
                 if (p.length > 0) codes.add(p[0]);
             }

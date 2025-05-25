@@ -4,12 +4,7 @@
  */
 package model;
 
-/**
- *
- * @author juper
- */
-
-
+//attriuts et getters pour opération
 public class Operation {
     private String refOperation;
     private String dOperation;

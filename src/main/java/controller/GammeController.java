@@ -4,11 +4,6 @@
  */
 
 
-/**
- *
- * @author juper
- */
-
 package controller;
 
 import javafx.scene.control.TextArea;
@@ -43,7 +38,6 @@ public class GammeController {
 
                 // Affichage de la gamme de base avec son coût de production
                
-
                 outputArea.appendText("Gamme de base: " + refGamme + " - " + designationGamme + " - Coût de production: " + String.format("%.2f", coutTotal) + " €\n");
             }
         }
@@ -78,6 +72,7 @@ public class GammeController {
     }
 }
 
+  //méthode pour enregistrer les gammes dans le fichier texte
    public static void enregistrerGamme(
     String refGamme,
     String codeProduit,

@@ -4,12 +4,9 @@
  */
 package model;
 
-/**
- *
- * @author juper
- */
 
 
+//attributs et getters pour les postes et accès a Machine (un poste est composé de machines)
 import java.util.ArrayList;
 
 public class Poste {

@@ -4,7 +4,7 @@
  */
 package model;
 
-
+//attributs et getters pour machine
 public class Machine {
     private String refMachine;
     private String dmachine;
@@ -49,10 +49,5 @@ public class Machine {
     public float coutUtilisation(float duree) {
         return coutHoraire * duree;
     }
-
-   
-
-    
-
    
 }

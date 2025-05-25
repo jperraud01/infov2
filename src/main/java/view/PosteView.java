@@ -15,11 +15,9 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.*;
 
-/**
- *
- * @author juper
- */
+
 public class PosteView {
+    
    public static void ouvrirFenetrePoste(TextArea outputArea) {
         Stage stage = new Stage();
         stage.setTitle("Ajouter un Poste");
@@ -61,7 +59,7 @@ public class PosteView {
                 }     
                 }
             
-            PosteController.enregistrerPoste(poste);
+            PosteController.enregistrerPoste(poste); //envoie les infos entrées par l'utilisateur au controlleur pour les entrer dans le fichier 
             
             stage.close();
         });
@@ -82,13 +80,13 @@ public class PosteView {
         VBox posteList = new VBox(10);
         posteList.setPadding(new Insets(10));
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("postes.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("postes.txt"))) { //recup infos dans fichier pour les afficher 
             String ligne;
             while ((ligne = reader.readLine()) != null) {
-                String[] parts = ligne.split(" ");
+                String[] parts = ligne.split(" "); //lit le fichier entre les espaces pour recup élements individuels
                 if (parts.length >= 2) {
-                    String ref = parts[0];
-                    String designation = parts[1];
+                    String ref = parts[0]; //récupere premier element: reference
+                    String designation = parts[1]; //recupere deuxieme element: designation
 
                     Button btnPoste = new Button(ref + " - " + designation);
 
@@ -98,9 +96,9 @@ public class PosteView {
                         MenuItem supprimer = new MenuItem("Supprimer le poste");
                         supprimer.setOnAction(ev -> {
                             supprimerPoste(ref);
-                            outputArea.appendText("Poste supprimé : " + ref + "\n");
+                            
                             stage.close();
-                            afficherListePostes(outputArea); // refresh
+                            afficherListePostes(outputArea); 
                         });
 
                         menu.getItems().addAll( supprimer);
@@ -118,7 +116,7 @@ public class PosteView {
         stage.setScene(scene);
         stage.show();
     }
-
+    //méthode appelee au dessus pour supprimer un poste
     private static void supprimerPoste(String ref) {
         File input = new File("postes.txt");
         File temp = new File("postes_temp.txt");

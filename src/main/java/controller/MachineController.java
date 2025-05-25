@@ -6,9 +6,6 @@ package controller;
 
 import javafx.scene.control.TextArea;
 import model.Machine;
-
-
-
 import java.io.*;
 import view.MachineView;
 
@@ -70,7 +67,7 @@ public class MachineController {
 
     // Méthode pour obtenir le coût horaire d'une machine
     public static double getCoutHoraireForMachine(String machineCode) {
-        // Lire d'abord les machines de base
+        // lit d'abord les machines de base
         try (BufferedReader reader = new BufferedReader(new FileReader("machines_base.txt"))) {
             String ligne;
             while ((ligne = reader.readLine()) != null) {

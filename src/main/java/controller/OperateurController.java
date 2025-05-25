@@ -3,14 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller;
-
-/**
- *
- * @author juper
- */
-
 import model.Operateur;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,7 +12,7 @@ import java.util.List;
 public class OperateurController {
 
     private static Operateur operateurActif;
-
+    //enregistre l'opérateur avec son nom, compétences et code
     public static void enregistrerOperateur(Operateur op) {
         operateurActif = op;
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("operateurs.txt", true))) {

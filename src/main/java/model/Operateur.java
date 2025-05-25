@@ -8,7 +8,7 @@ package model;
 import java.util.List;
 
 
-
+//attributs d'operateur, getters
 public class Operateur {
     private String code;
     private String nom;

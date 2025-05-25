@@ -79,19 +79,20 @@ public class MachineView {
         stage.show();
     }
 
- 
+ //méthode pour afficher le plan des machines 
     public static void afficherPlanMachines() {
     Stage stage = new Stage();
     stage.setTitle("Plan des Machines");
 
     Pane planPane = new Pane();
 
-    Map<String, String> operationsParMachine = new HashMap<>();
+    Map<String, String> operationsParMachine = new HashMap<>(); //hashmap pour associer une machine a son opération
+    //pour récupérer les infos sur chaque machine
     try (BufferedReader opReader = new BufferedReader(new FileReader("operations_par_machine.txt"))) {
         String ligneOp;
         while ((ligneOp = opReader.readLine()) != null) {
             if (ligneOp.startsWith("Machine")) {
-                String[] parts = ligneOp.split(" : ");
+                String[] parts = ligneOp.split(" : "); //sépare les élements du fichier selon les doubke point
                 if (parts.length == 2) {
                     String ref = parts[0].replace("Machine", "").trim();
                     String ops = parts[1].trim();
@@ -103,11 +104,11 @@ public class MachineView {
         e.printStackTrace();
     }
 
-    // Récupérer l'opérateur actif
+    // Récupérer l'opérateur 
     Operateur operateur = OperateurController.getOperateurActif();
     List<String> toutesLesMachines = new ArrayList<>();
 
-    // Lire les machines depuis "machines_base.txt" et "machines.txt"
+    // pour lire les machines depuis "machines_base.txt" et "machines.txt"
     try (BufferedReader baseReader = new BufferedReader(new FileReader("machines_base.txt"))) {
         String ligne;
         while ((ligne = baseReader.readLine()) != null) {
@@ -125,23 +126,23 @@ public class MachineView {
     } catch (IOException e) {
         System.err.println("Fichier machines.txt manquant.");
     }
-
+    //pour recupérer les coordonnées et autres infos sur la machine
     for (String ligne : toutesLesMachines) {
-        String[] parts = ligne.split(" ");
+        String[] parts = ligne.split(" "); //on sépare le fichier selon les espaces
         if (parts.length >= 7) {
-            String ref = parts[0];
-            String designation = parts[1];
-            String type = parts[2];
-            float cout = Float.parseFloat(parts[3]);
-            int x = Integer.parseInt(parts[4]);
+            String ref = parts[0]; //premiere colonne est la ref
+            String designation = parts[1]; //deuxieme colonne est la désignation
+            String type = parts[2]; //3eme est le type
+            float cout = Float.parseFloat(parts[3]); //4me est le cout
+            int x = Integer.parseInt(parts[4]); //5eme et 6eme sont les coordonnées
             int y = Integer.parseInt(parts[5]);
             String etat = parts[6];
 
-            // Récupérer les opérations requises pour la machine
+            // pour récupérer les opérations requises pour la machine
             String ops = operationsParMachine.getOrDefault(ref, "");
             boolean compatible = true;
 
-            // Vérifier si l'opérateur a toutes les compétences nécessaires pour cette machine
+            // pour vérifier si l'opérateur a toutes les compétences nécessaires pour cette machine
             if (!ops.isEmpty() && operateur != null) {
                 String[] opList = ops.split(",\\s*");
                 for (String op : opList) {
@@ -154,7 +155,7 @@ public class MachineView {
 
             Color couleur;
 
-            // Si l'opérateur est compatible, la machine doit être dans son état normal
+            // Si l'opérateur a les compétences la couleur de la machine est en fonction de son état
             if (compatible) {
                 if (etat.equals("En_panne")) {
                     couleur = Color.TOMATO;  // Rouge pour en panne
@@ -164,8 +165,8 @@ public class MachineView {
                     couleur = Color.LIGHTGREEN;  // Vert pour en marche
                 }
             } else {
-                // Si l'opérateur n'a pas les compétences, la machine devient grise
-                couleur = Color.LIGHTGRAY;  // Gris si l'opérateur n'a pas les compétences
+                // Si l'opérateur n'a pas les compétences la machine est grisée
+                couleur = Color.LIGHTGRAY; 
             }
 
             // Création du rectangle représentant la machine
@@ -175,7 +176,7 @@ public class MachineView {
             rect.setLayoutX(x);
             rect.setLayoutY(y);
 
-            // Ajouter des informations sur la machine (référence, désignation, etc.)
+            // Ajouter des informations sur la machine dans le plan (référence, désignation,opération)
             Text designationLabel = new Text(designation);
             designationLabel.setLayoutX(x + 5);
             designationLabel.setLayoutY(y + 35);
@@ -195,12 +196,12 @@ public class MachineView {
             }
         }
     }
-
+    
     Scene scene = new Scene(planPane, 800, 600);
     stage.setScene(scene);
     stage.show();
 }
-
+    //pour changer l'etat d'une machine et donc sa couleur
     private static void changerEtatDansFichier(String ref, String nouvelEtat) {
         File original = new File("machines.txt");
         File temp = new File("machines_temp.txt");
@@ -229,7 +230,7 @@ public class MachineView {
         temp.renameTo(original);
     }
 
- 
+ //pour afficher les machines dans la outputArea
 public static void afficherListeMachines(TextArea outputArea) {
     Stage stage = new Stage();
     stage.setTitle("Liste des Machines");
@@ -248,11 +249,11 @@ public static void afficherListeMachines(TextArea outputArea) {
                 float coutHoraire = Float.parseFloat(parts[3]); // Coût horaire (4ème colonne)
                 
                 // Calcul du coût pour 1h d'utilisation
-                float coutParHeure = coutHoraire * 1;  // Pour 1 heure
+                float coutParHeure = coutHoraire * 1;  
 
                 // Création du bouton avec la référence, la désignation et le coût
                 Button btnMachine = new Button(ref + " - " + designation + " - Coût 1h: " + String.format("%.2f", coutParHeure) + " €");
-
+                // Tout les boutons de l'interface concernant les machines
                 btnMachine.setOnAction(e -> {
                     ContextMenu menu = new ContextMenu();
 
@@ -263,7 +264,7 @@ public static void afficherListeMachines(TextArea outputArea) {
                     supprimer.setOnAction(ev -> {
                         MachineController.supprimerMachine(ref);
                         stage.close();
-                        afficherListeMachines(outputArea); // Refresh
+                        afficherListeMachines(outputArea); 
                     });
 
                     MenuItem changerEtat = new MenuItem("Changer l'état");
@@ -308,7 +309,7 @@ public static void afficherListeMachines(TextArea outputArea) {
         outputArea.appendText("Erreur lors de la lecture des machines de base.\n");
     }
 
-    // Lire les machines supplémentaires depuis 'machines.txt'
+    // Lire les machines supplémentaires enregistrées par l'utilisateur depuis 'machines.txt'
     try (BufferedReader reader = new BufferedReader(new FileReader("machines.txt"))) {
         String ligne;
         while ((ligne = reader.readLine()) != null) {
@@ -319,7 +320,7 @@ public static void afficherListeMachines(TextArea outputArea) {
                 float coutHoraire = Float.parseFloat(parts[3]); // Coût horaire (4ème colonne)
                 
                 // Calcul du coût pour 1h d'utilisation
-                float coutParHeure = coutHoraire * 1;  // Pour 1 heure
+                float coutParHeure = coutHoraire * 1;  
 
                 // Création du bouton avec la référence, la désignation et le coût
                 Button btnMachine = new Button(ref + " - " + designation + " - Coût par h: " + String.format("%.2f", coutParHeure) + " €");
@@ -334,7 +335,7 @@ public static void afficherListeMachines(TextArea outputArea) {
                     supprimer.setOnAction(ev -> {
                         MachineController.supprimerMachine(ref);
                         stage.close();
-                        afficherListeMachines(outputArea); // Refresh
+                        afficherListeMachines(outputArea); 
                     });
 
                     MenuItem changerEtat = new MenuItem("Changer l'état");

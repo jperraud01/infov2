@@ -13,7 +13,7 @@ public class PosteController {
 
     private static ArrayList<Poste> postes = new ArrayList<>();
 
-   
+   //enregistre les infos entrées par l'utilisateur dans un fichier texte
     public static void enregistrerPoste(Poste poste) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("postes.txt", true))) {
         writer.write(poste.getRefPoste() + " " + poste.getDposte());
@@ -25,8 +25,9 @@ public class PosteController {
         ex.printStackTrace();
     }
 }
+    //pour afficher les postes dans la outputArea
 public static void afficherPostes(TextArea outputArea) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("postes.txt"))) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("postes.txt"))) { //recupère les infos dans le fichier
         String ligne;
         outputArea.appendText("Postes enregistrés :\n");
         while ((ligne = reader.readLine()) != null) {
@@ -36,8 +37,5 @@ public static void afficherPostes(TextArea outputArea) {
         outputArea.appendText("Erreur lors de la lecture des postes : " + ex.getMessage() + "\n");
     }
 }
-
-
-   
 
 }

@@ -15,11 +15,9 @@ import javafx.stage.Stage;
 import model.Equipement;
 import controller.EquipementController;
 
-/**
- *
- * @author juper
- */
+
 public class EquipementView {
+    //ouvre une fenetre pour ajouter un equipement, pas utilisée dans le projet 
     public static void ouvrirFenetreEquipement(TextArea outputArea) {
         Stage stage = new Stage();
         stage.setTitle("Ajouter un Équipement");
